@@ -1,7 +1,8 @@
 name: Release
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - release2_1_0_M3
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -23,11 +24,7 @@ jobs:
           java-version: ${{ matrix.java }}
       - name: Set the current release version
         id: release_version
-        run: echo ::set-output name=release_version::${GITHUB_REF:11}
-      - name: Run pre-release
-        uses: micronaut-projects/github-actions/pre-release@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+        run: echo ::set-output name=release_version::2.1.0.M3
       - name: Publish, Upload to Bintray
         env:
           BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
@@ -38,8 +35,6 @@ jobs:
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
           SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
         run: |
-          echo "Publishing Artifacts"
-          ./gradlew bintrayUpload
           echo "Publishing Docs..."
           ./gradlew views-docs:docs
       - name: Export Gradle Properties
