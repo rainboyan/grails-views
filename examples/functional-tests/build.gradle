@@ -7,7 +7,7 @@ buildscript {
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
         classpath "org.grails.plugins:views-gradle:$functionalTestViewsGradleVersion"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:$assetPipelineVersion"
+        classpath "org.grails.plugins:asset-pipeline-gradle:$assetPipelineVersion"
         classpath "io.spring.gradle:dependency-management-plugin:$springDependencyManagementPluginVersion"
         classpath "org.gradle:test-retry-gradle-plugin:1.3.1"
     }
@@ -19,7 +19,7 @@ group "functional.tests"
 apply plugin: "eclipse"
 apply plugin: "idea"
 apply plugin: "war"
-apply plugin: "com.bertramlabs.asset-pipeline"
+apply plugin: "org.grails.asset-pipeline"
 apply plugin: "org.grails.grails-web"
 apply plugin: "org.grails.grails-gsp"
 apply plugin: "io.spring.dependency-management"
@@ -70,7 +70,7 @@ dependencies {
     implementation project(":examples-functional-tests-plugin")
 
     runtimeOnly "org.apache.tomcat:tomcat-jdbc:9.0.13"
-    runtimeOnly "com.bertramlabs.plugins:asset-pipeline-grails:$assetPipelineVersion"
+    runtimeOnly "org.grails.plugins:asset-pipeline-grails:$assetPipelineVersion"
     runtimeOnly project(":views-json-templates")
 
     testImplementation project(":views-json-testing-support")
