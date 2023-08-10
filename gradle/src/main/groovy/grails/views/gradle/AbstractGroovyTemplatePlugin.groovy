@@ -55,7 +55,7 @@ class AbstractGroovyTemplatePlugin implements Plugin<Project> {
         SourceSetOutput output = mainSourceSet?.output
         FileCollection classesDir = resolveClassesDirs(output, project)
         File destDir = new File(project.buildDir, "${templateCompileTask.fileExtension}-classes/main")
-        output?.dir(destDir)
+
         Configuration providedConfig = project.configurations.findByName('provided')
 
 
