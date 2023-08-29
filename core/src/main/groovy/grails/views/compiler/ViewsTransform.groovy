@@ -7,7 +7,6 @@ import groovy.text.markup.MarkupTemplateEngine
 import groovy.transform.CompilationUnitAware
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
-import org.apache.commons.validator.Var
 import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.ast.ClassCodeExpressionTransformer
 import org.codehaus.groovy.ast.ClassCodeVisitorSupport
