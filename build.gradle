@@ -98,6 +98,13 @@ subprojects { project->
 
         configurations {
             documentation
+            all { Configuration configuration->
+                configuration.resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+                    if (details.requested.group == 'org.codehaus.groovy' && details.requested.name.startsWith('groovy')) {
+                        details.useVersion(groovyVersion)
+                    }
+                }
+            }
         }
 
         dependencies {
