@@ -82,7 +82,7 @@ class AbstractGroovyTemplatePlugin implements Plugin<Project> {
                 project.name
         )
         templateCompileTask.setSource(
-                project.file("${project.projectDir}/$pathToSource")
+                project.file("${project.projectDir}/$pathToSource/views")
         )
 
         templateCompileTask.dependsOn( allTasks.findByName('classes') )
