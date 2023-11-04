@@ -1,25 +1,26 @@
 package grails.plugin.json.view.mvc
 
+import groovy.transform.CompileStatic
+import org.springframework.beans.factory.InitializingBean
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.validation.Errors
+
 import grails.core.support.proxy.ProxyHandler
 import grails.plugin.json.renderer.ErrorsJsonViewRenderer
 import grails.plugin.json.renderer.JsonViewJsonRenderer
-import grails.plugin.json.view.JsonViewTemplateEngine
 import grails.plugin.json.view.JsonViewConfiguration
+import grails.plugin.json.view.JsonViewTemplateEngine
 import grails.plugin.json.view.JsonViewWritableScript
 import grails.rest.render.RendererRegistry
 import grails.views.mvc.SmartViewResolver
 import grails.web.mime.MimeType
-import groovy.transform.CompileStatic
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.validation.Errors
 
-import javax.annotation.PostConstruct
 /**
  * @author Graeme Rocher
  * @since 1.0
  */
 @CompileStatic
-class JsonViewResolver extends SmartViewResolver {
+class JsonViewResolver extends SmartViewResolver implements InitializingBean {
 
     public static final String JSON_VIEW_SUFFIX = ".${JsonViewWritableScript.EXTENSION}"
 
@@ -44,8 +45,8 @@ class JsonViewResolver extends SmartViewResolver {
         viewConfiguration = (JsonViewConfiguration)templateEngine.viewConfiguration
     }
 
-    @PostConstruct
-    void initialize() {
+    @Override
+    void afterPropertiesSet() {
         if(rendererRegistry != null) {
             def errorsRenderer = new ErrorsJsonViewRenderer((Class)Errors)
             errorsRenderer.setJsonViewResolver(this)
@@ -60,4 +61,5 @@ class JsonViewResolver extends SmartViewResolver {
 
         }
     }
+
 }
