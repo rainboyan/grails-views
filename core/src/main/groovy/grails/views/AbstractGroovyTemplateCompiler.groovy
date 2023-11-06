@@ -1,5 +1,7 @@
 package grails.views
 
+import groovy.transform.CompileStatic
+
 import grails.views.compiler.ViewsTransform
 import grails.views.resolve.GenericGroovyTemplateResolver
 import groovy.io.FileType
@@ -16,19 +18,21 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.ExecutorCompletionService
 import java.util.concurrent.CompletionService
 import java.util.concurrent.Future
+
 /**
  * A generic compiler for Groovy templates that are compiled into classes in production
  *
  * @author Graeme Rocher
  * @since 1.0
  */
+@CompileStatic
 abstract class AbstractGroovyTemplateCompiler {
 
     @Delegate CompilerConfiguration configuration = new CompilerConfiguration()
 
-    String packageName = ""
-    File sourceDir
-    ViewConfiguration viewConfiguration
+    protected String packageName = ""
+    protected File sourceDir
+    protected ViewConfiguration viewConfiguration
 
     AbstractGroovyTemplateCompiler(ViewConfiguration configuration, File sourceDir) {
         this.viewConfiguration = configuration
@@ -57,10 +61,9 @@ abstract class AbstractGroovyTemplateCompiler {
     }
 
     void compile(List<File> sources) {
-        
         ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()*2)
         CompletionService completionService = new ExecutorCompletionService(threadPool);
-        
+
         try {
             Integer collationLevel = Runtime.getRuntime().availableProcessors()*2
             if(sources.size() < collationLevel) {
@@ -69,12 +72,12 @@ abstract class AbstractGroovyTemplateCompiler {
             configuration.setClasspathList(classpath)
             String pathToSourceDir = sourceDir.canonicalPath
             def collatedSources = sources.collate(collationLevel)
-            List<Future<Boolean>> futures = []
-            for(int index=0;index < collatedSources.size();index++) {
+            List<Future<Object>> futures = new ArrayList<>()
+            for (int index=0; index < collatedSources.size(); index++) {
                 def sourceFiles = collatedSources[index]
                 futures << completionService.submit({ ->
                     CompilerConfiguration configuration = new CompilerConfiguration(this.configuration)
-                    for(int viewIndex=0;viewIndex < sourceFiles.size();viewIndex++) {
+                    for (int viewIndex=0; viewIndex < sourceFiles.size(); viewIndex++) {
                         File source = sourceFiles[viewIndex]
                         configureCompiler(configuration)
                         CompilationUnit unit = new CompilationUnit(configuration)
@@ -97,31 +100,29 @@ abstract class AbstractGroovyTemplateCompiler {
             }
 
             int pending = futures.size()
-                
+
             while (pending > 0) {
                 // Wait for up to 100ms to see if anything has completed.
                 // The completed future is returned if one is found; otherwise null.
                 // (Tune 100ms as desired)
-                def completed = completionService.poll(100, TimeUnit.MILLISECONDS);
+                def completed = completionService.poll(100, TimeUnit.MILLISECONDS)
                 if (completed != null) {
-                    Boolean response = completed.get() as Boolean//need this to throw exceptions on main thread it seems
-                    --pending;
+                    //need this to throw exceptions on main thread it seems
+                    Boolean response = completed.get() as Boolean
+                    --pending
                 }
             } 
-        }     
-        finally {
-                threadPool.shutdown()
         }
-                
-        
-
+        finally {
+            threadPool.shutdown()
+        }
     }
 
     void compile(File...sources) {
         compile Arrays.asList(sources)
     }
 
-    static void run(String[] args, Class<? extends GenericViewConfiguration> configurationClass, Class<? extends AbstractGroovyTemplateCompiler> compilerClass) {
+    static void run(String[] args, Class<? extends ViewConfiguration> configurationClass, Class<? extends AbstractGroovyTemplateCompiler> compilerClass) {
         if(args.length != 7) {
             System.err.println("Invalid arguments: [${args.join(',')}]")
             System.err.println("""
@@ -137,7 +138,7 @@ Usage: java -cp CLASSPATH ${compilerClass.name} [srcDir] [destDir] [targetCompat
         File configFile = new File(args[5])
         String encoding = new File(args[6])
 
-        GenericViewConfiguration configuration = configurationClass.newInstance()
+        ViewConfiguration configuration = configurationClass.newInstance()
         configuration.packageName = packageName
         configuration.encoding = encoding
         configuration.packageImports = packageImports

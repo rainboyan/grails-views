@@ -77,6 +77,7 @@ abstract class AbstractGroovyTemplateCompileTask extends AbstractCompile {
 
         ExecResult result = project.javaexec(
                 new Action<JavaExecSpec>() {
+
                     @Override
                     @CompileDynamic
                     void execute(JavaExecSpec javaExecSpec) {
