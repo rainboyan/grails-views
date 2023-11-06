@@ -1,7 +1,6 @@
 package grails.views.json.test.spock
 
 import grails.core.GrailsApplication
-import grails.plugin.json.view.JsonViewGrailsPlugin
 import grails.views.json.test.JsonViewUnitTest
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
@@ -38,8 +37,5 @@ class JsonViewSetupSpecInterceptor implements IMethodInterceptor {
                 canInitializeEntities = true
             }
         }
-        JsonViewGrailsPlugin plugin = new JsonViewGrailsPlugin()
-        plugin.setApplicationContext(grailsApplication.mainContext)
-        test.defineBeans(plugin)
     }
 }

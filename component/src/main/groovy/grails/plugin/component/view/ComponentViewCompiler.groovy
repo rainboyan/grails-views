@@ -3,13 +3,12 @@ package grails.plugin.component.view
 import grails.plugin.component.view.internal.ComponentViewsTransform
 import grails.views.AbstractGroovyTemplateCompiler
 import grails.views.compiler.ViewsTransform
-import groovy.io.FileType
-import groovy.text.markup.BaseTemplate
 import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
 import org.codehaus.groovy.control.CompilerConfiguration
 import org.codehaus.groovy.control.customizers.ASTTransformationCustomizer
 import org.codehaus.groovy.control.customizers.CompilationCustomizer
+
 /**
  * A compiler for markup templates
  *
@@ -26,7 +25,7 @@ class ComponentViewCompiler extends AbstractGroovyTemplateCompiler {
         def templateCustomizer = (CompilationCustomizer) getClass().classLoader.loadClass("groovy.text.markup.TemplateASTTransformer")
                 .newInstance(viewConfiguration)
         configuration.addCompilationCustomizers(templateCustomizer)
-        if(viewConfiguration.compileStatic) {
+        if (viewConfiguration.compileStatic) {
             configuration.addCompilationCustomizers(
                     new ASTTransformationCustomizer(Collections.singletonMap("extensions", "groovy.text.markup.MarkupTemplateTypeCheckingExtension"), CompileStatic.class));
         }
@@ -41,5 +40,5 @@ class ComponentViewCompiler extends AbstractGroovyTemplateCompiler {
     static void main(String[] args) {
         run(args, ComponentViewConfiguration, ComponentViewCompiler)
     }
-}
 
+}
