@@ -1,6 +1,5 @@
 package grails.views
 
-import grails.config.ConfigMap
 import grails.core.GrailsApplication
 import grails.core.GrailsClass
 import grails.core.support.GrailsApplicationAware
@@ -8,11 +7,7 @@ import grails.util.BuildSettings
 import grails.util.Environment
 import grails.util.Metadata
 import groovy.transform.CompileStatic
-import org.grails.config.CodeGenConfig
 import org.grails.core.artefact.DomainClassArtefactHandler
-import org.springframework.beans.BeanUtils
-
-import java.beans.PropertyDescriptor
 
 /**
  * Default configuration
@@ -54,7 +49,7 @@ trait GenericViewConfiguration implements ViewConfiguration, GrailsApplicationAw
     /**
      * The template base class
      */
-    Class baseTemplateClass
+    private Class baseTemplateClass
     /**
      * Whether the cache templates
      */
@@ -77,6 +72,15 @@ trait GenericViewConfiguration implements ViewConfiguration, GrailsApplicationAw
      */
     String[] staticImports = ["org.springframework.http.HttpStatus", "org.springframework.http.HttpMethod", "grails.web.http.HttpHeaders"] as String[]
 
+    void setBaseTemplateClass(Class<?> baseTemplateClass) {
+        this.baseTemplateClass = baseTemplateClass
+    }
+
+    @Override
+    Class<?> getBaseTemplateClass() {
+        this.baseTemplateClass
+    }
+
     @Override
     void setGrailsApplication(GrailsApplication grailsApplication) {
         if(grailsApplication != null) {
@@ -84,39 +88,6 @@ trait GenericViewConfiguration implements ViewConfiguration, GrailsApplicationAw
             setPackageImports(
                     findUniquePackages(domainArtefacts)
             )
-        }
-    }
-
-    void readConfiguration(File configFile) {
-        if(configFile?.exists()) {
-            def config = new CodeGenConfig()
-            config.loadYml(configFile)
-            readConfiguration(config)
-        }
-    }
-
-    void readConfiguration(ConfigMap config) {
-        String moduleName = viewModuleName
-        GroovyObject configObject = (GroovyObject)this
-        if (config != null) {
-            PropertyDescriptor[] descriptors =  BeanUtils.getPropertyDescriptors(GenericViewConfiguration)
-            for (PropertyDescriptor desc in descriptors) {
-                if (desc.writeMethod != null) {
-                    String propertyName = desc.name
-                    Object value
-                    if (desc.propertyType == Class) {
-                        String className = config.getProperty("grails.views.${moduleName}.$propertyName".toString(), String)
-                        if (className) {
-                            value = getClass().classLoader.loadClass(className)
-                        }
-                    } else {
-                        value = config.getProperty("grails.views.${moduleName}.$propertyName", (Class) desc.propertyType)
-                    }
-                    if(value != null) {
-                        configObject.setProperty(propertyName, value)
-                    }
-                }
-            }
         }
     }
 
