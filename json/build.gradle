@@ -1,24 +1,8 @@
-import org.grails.gradle.plugin.web.gsp.GroovyPageCompileTask
-
-group "org.grails.plugins"
-
-apply plugin: "org.grails.grails-gsp"
-
 dependencies {
     api "org.grails:grails-core:$grailsVersion"
-    api project(":views-core")
+    api project(":grails-views-core")
 
     testImplementation "org.grails:grails-test-support:$grailsVersion"
     testImplementation "org.grails:grails-datastore-gorm-hibernate5:$gormHibernateVersion"
     testRuntimeOnly "org.javassist:javassist:3.29.0-GA"
-
-    console "org.grails:grails-console:$grailsVersion"
-}
-
-tasks.withType(GroovyPageCompileTask) {
-    classpath += configurations.compileClasspath
-}
-
-jar {
-  exclude "*.gson"
 }

@@ -1,16 +1,6 @@
-ext {
-    userOrg = 'grails'
-}
-
-group "org.grails.plugins"
-
-apply plugin: "org.grails.grails-gsp"
-
 dependencies {
     api "org.grails:grails-core:$grailsVersion"
-    api project(":views-core")
+    api project(":grails-views-core")
 
     testImplementation "org.grails:grails-test-support:$grailsVersion"
-
-    console "org.grails:grails-console:$grailsVersion"
 }

@@ -1,15 +1,5 @@
-group "org.grails.plugins"
-
-ext {
-    gradleWrapperVersion = project.gradleWrapperVersion
-    userOrg = 'grails'
-    repo = 'plugins'
-    isGrailsPlugin = false
-    projectDesc = "JSON Views Templates"
-}
-
 dependencies {
-    api project(':views-json')
+    api project(':grails-views-json')
     compileOnly "org.grails:grails-plugin-rest:$grailsVersion"
     compileOnly "javax.servlet:javax.servlet-api:$servletApiVersion"
     compileOnly "org.grails:grails-datastore-gorm-mongodb:$mongodbVersion"
@@ -20,7 +10,7 @@ def compileViews = tasks.register("compileViews", JavaExec) {
     outputs.dir 'build/classes/groovy/main'
     mainClass.set("grails.plugin.json.view.JsonViewCompiler")
     classpath configurations.compileClasspath + configurations.runtimeClasspath
-    args("src/templates", "build/classes/groovy/main", "1.8", ' ', ' ', "none", "UTF-8")
+    args("src/templates", "build/classes/groovy/main", "11", ' ', ' ', "none", "UTF-8")
 }
 
 classes.dependsOn(compileViews)

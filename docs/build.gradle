@@ -26,7 +26,7 @@ asciidoctor {
                'toc'           : 'left',
                'icons'         : 'font',
                'version'       : project.version,
-               'sourcedir'     : "${rootProject.allprojects.find { it.name == 'views-core'}.projectDir}/src/main/groovy"
+               'sourcedir'     : "${rootProject.allprojects.find { it.name == 'grails-views-core'}.projectDir}/src/main/groovy"
 }
 
 configurations {
@@ -34,18 +34,18 @@ configurations {
 }
 
 dependencies {
-  documentation project(path: ':views-json', configuration: 'compileOnly')
-  documentation project(path: ':views-markup', configuration: 'compileOnly')
-  documentation project(path: ':views-gradle', configuration: 'compileOnly')
+    documentation project(path: ':grails-views-json', configuration: 'compileOnly')
+    documentation project(path: ':grails-views-markup', configuration: 'compileOnly')
+    documentation project(path: ':grails-views-gradle', configuration: 'compileOnly')
 }
 
 task apidocs(type: Groovydoc, group: 'documentation') {
     def allProjects = rootProject.allprojects.findAll { project ->
-      ['views-core', 'views-json', 'views-json-testing-support', 'views-markup','views-gradle'].contains(project.name)
+      ['grails-views-core', 'grails-views-json', 'grails-views-json-testing-support', 'grails-views-markup','grails-views-gradle'].contains(project.name)
     }
     source allProjects.collect { project ->
       project.files('src/main/groovy')
-    } 
+    }
 
     destinationDir = new File(buildDir, 'docs/api')
     // Might need a classpath
