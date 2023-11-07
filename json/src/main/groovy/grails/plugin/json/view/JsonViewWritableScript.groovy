@@ -2,6 +2,7 @@ package grails.plugin.json.view
 
 import grails.plugin.json.builder.JsonOutput
 import grails.plugin.json.builder.StreamingJsonBuilder
+import grails.plugin.json.builder.StreamingJsonDelegate
 import grails.plugin.json.view.api.JsonView
 import grails.plugin.json.view.api.internal.DefaultGrailsJsonViewHelper
 import grails.util.GrailsNameUtils
@@ -45,7 +46,7 @@ abstract class JsonViewWritableScript extends AbstractWritableScript implements 
      * @param callable
      * @return
      */
-    StreamingJsonBuilder json(@DelegatesTo(value = StreamingJsonBuilder.StreamingJsonDelegate, strategy = Closure.DELEGATE_FIRST) Closure callable) {
+    StreamingJsonBuilder json(@DelegatesTo(value = StreamingJsonDelegate, strategy = Closure.DELEGATE_FIRST) Closure callable) {
         if(parentTemplate != null) {
             if (!inline) {
                 out.write(JsonOutput.OPEN_BRACE)
@@ -53,7 +54,7 @@ abstract class JsonViewWritableScript extends AbstractWritableScript implements 
             def parentWritable = prepareParentWritable()
             parentWritable.writeTo(out)
             resetProcessedObjects()
-            def jsonDelegate = new StreamingJsonBuilder.StreamingJsonDelegate(out, false, generator)
+            def jsonDelegate = new StreamingJsonDelegate(out, false, generator)
             callable.setDelegate(jsonDelegate)
             callable.call()
             if (!inline) {
@@ -64,7 +65,7 @@ abstract class JsonViewWritableScript extends AbstractWritableScript implements 
 
             this.root = callable
             if(inline) {
-                def jsonDelegate = new StreamingJsonBuilder.StreamingJsonDelegate(out, true, generator)
+                def jsonDelegate = new StreamingJsonDelegate(out, true, generator)
                 callable.setDelegate(jsonDelegate)
                 callable.call()
             }
@@ -134,7 +135,7 @@ abstract class JsonViewWritableScript extends AbstractWritableScript implements 
      * @param callable
      * @return
      */
-    StreamingJsonBuilder json(Iterable iterable, @DelegatesTo(value = StreamingJsonBuilder.StreamingJsonDelegate, strategy = Closure.DELEGATE_FIRST) Closure callable) {
+    StreamingJsonBuilder json(Iterable iterable, @DelegatesTo(value = StreamingJsonDelegate, strategy = Closure.DELEGATE_FIRST) Closure callable) {
         json.call(iterable.asList(), callable)
         return json
     }
