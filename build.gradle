@@ -44,14 +44,6 @@ subprojects { project->
     group "org.grails.views"
     version project.projectVersion
 
-    configurations.all {
-        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            if(details.requested.group == 'org.codehaus.groovy') {
-                details.useVersion(groovyVersion)
-            }
-        }
-    }
-
     if (project.name.startsWith('examples') || project.name.endsWith('docs')) {
         return
     }
@@ -93,13 +85,6 @@ subprojects { project->
 
         configurations {
             documentation
-            all { Configuration configuration->
-                configuration.resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-                    if (details.requested.group == 'org.codehaus.groovy' && details.requested.name.startsWith('groovy')) {
-                        details.useVersion(groovyVersion)
-                    }
-                }
-            }
         }
 
         dependencies {
