@@ -1,24 +1,24 @@
 package grails.plugin.markup.view.mvc
 
+import groovy.transform.CompileStatic
+import org.springframework.beans.factory.InitializingBean
+import org.springframework.beans.factory.annotation.Autowired
+
 import grails.core.support.proxy.ProxyHandler
 import grails.plugin.markup.view.MarkupViewConfiguration
 import grails.plugin.markup.view.MarkupViewTemplate
 import grails.plugin.markup.view.MarkupViewTemplateEngine
-import grails.plugin.markup.view.MarkupViewWritableScriptTemplate
 import grails.plugin.markup.view.renderer.MarkupViewXmlRenderer
 import grails.rest.render.RendererRegistry
 import grails.views.mvc.SmartViewResolver
 import grails.web.mime.MimeType
-import groovy.transform.CompileStatic
-import org.springframework.beans.factory.annotation.Autowired
-import jakarta.annotation.PostConstruct
 
 /**
  * @author Graeme Rocher
  * @since 1.0
  */
 @CompileStatic
-class MarkupViewResolver extends SmartViewResolver {
+class MarkupViewResolver extends SmartViewResolver implements InitializingBean {
 
     public static final String MARKUP_VIEW_SUFFIX = ".${MarkupViewTemplate.EXTENSION}"
 
@@ -44,8 +44,8 @@ class MarkupViewResolver extends SmartViewResolver {
         viewConfiguration = (MarkupViewConfiguration)templateEngine.viewConfiguration
     }
 
-    @PostConstruct
-    void initialize() {
+    @Override
+    void afterPropertiesSet() {
         if(rendererRegistry != null) {
             def defaultXmlRenderer = rendererRegistry.findRenderer(MimeType.XML, Object.class)
             viewConfiguration.mimeTypes.each { String mimeTypeString ->
@@ -56,4 +56,5 @@ class MarkupViewResolver extends SmartViewResolver {
             }
         }
     }
+
 }

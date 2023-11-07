@@ -33,15 +33,9 @@ publishing {
     publications {
         pluginMaven(MavenPublication) {
             artifactId project.name
-            if (project.name != "views-gradle") {
+            if (project.name != "grails-views-gradle") {
                 from components.java
             }
-
-            // if (isGrailsPlugin) {
-            //     artifact source: "${project.sourceSets.main.groovy.classesDirectory}/META-INF/grails-plugin.xml",
-            //             classifier: "plugin",
-            //             extension: 'xml'
-            // }
 
             pom {
                 name = 'Grails Views'
@@ -112,7 +106,5 @@ afterEvaluate {
         onlyIf { isReleaseVersion }
     }
 }
-
-
 
 task install(dependsOn: project.tasks.withType(PublishToMavenLocal))

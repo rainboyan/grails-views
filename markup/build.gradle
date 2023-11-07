@@ -1,21 +1,9 @@
-ext {
-    userOrg = 'grails'
-}
-
-group "org.grails.plugins"
-
-apply plugin: "org.grails.grails-gsp"
-
 dependencies {
-    api project(":views-core")
-    api "org.grails:grails-core:$grailsVersion", {
-        exclude group: 'org.grails', module: 'grails-datastore-core'
-    }
+    api project(":grails-views-core")
+    api "org.grails:grails-core:$grailsVersion"
 
     testImplementation "org.grails:grails-test-support:$grailsVersion", {
         exclude group: 'org.grails', module: 'grails-datastore-gorm'
         exclude group: 'org.grails', module: 'grails-datastore-gorm-test'
     }
-
-    console "org.grails:grails-console:$grailsVersion"
 }

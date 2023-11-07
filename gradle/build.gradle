@@ -7,7 +7,7 @@ ext {
 	projectDesc = "Grails Views Gradle Plugin"
 }
 
-group "org.grails.plugins"
+group "org.grails.views"
 
 dependencies {
 	compileOnly gradleApi()
@@ -33,19 +33,19 @@ if (!tasks.findByName("javadocJar")) {
 gradlePlugin {
 	plugins {
 		viewsJson {
-			id = 'org.grails.plugins.views-json'
+			id = 'org.grails.grails-views-json'
 			implementationClass = 'grails.views.gradle.json.GrailsJsonViewsPlugin'
 			displayName = "Grails Json Views Gradle Plugin"
 			description = 'The Gradle plugin for Json Views'
 		}
 		viewsMarkup {
-			id = 'org.grails.plugins.views-markup'
+			id = 'org.grails.grails-views-markup'
 			implementationClass = 'grails.views.gradle.markup.GrailsMarkupViewsPlugin'
 			displayName = "Grails Markup Views Gradle Plugin"
 			description = 'The Gradle plugin for Markup Views'
 		}
 		viewsComponent {
-			id = 'org.grails.plugins.views-component'
+			id = 'org.grails.grails-views-component'
 			implementationClass = 'grails.views.gradle.component.GrailsComponentViewsPlugin'
 			displayName = "Grails Component Views Gradle Plugin"
 			description = 'The Gradle plugin for Component Views'

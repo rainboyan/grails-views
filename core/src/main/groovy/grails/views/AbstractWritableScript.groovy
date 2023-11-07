@@ -53,7 +53,7 @@ abstract class AbstractWritableScript extends Script implements WritableScript, 
      * @param writer The writer
      * @return The original writer or a wrapped version
      */
-    abstract Writer doWrite(Writer writer)
+    abstract Writer doWrite(Writer writer) throws IOException
 
 
     void setModelTypes(Map<String, Class> modelTypes) {

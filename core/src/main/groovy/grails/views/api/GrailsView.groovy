@@ -6,7 +6,6 @@ import grails.views.GrailsViewTemplate
 import grails.views.ResolvableGroovyTemplateEngine
 import grails.views.WritableScript
 import grails.views.WriterProvider
-import grails.views.api.internal.DefaultGrailsViewHelper
 import grails.web.mapping.LinkGenerator
 import grails.web.mime.MimeUtility
 import groovy.transform.CompileStatic
@@ -91,15 +90,6 @@ trait GrailsView extends HttpView implements WriterProvider, WritableScript {
      * @return The configuration
      */
     Config config
-
-    private GrailsViewHelper viewHelper = new DefaultGrailsViewHelper(this)
-
-    /**
-     * @return Obtain the view helper
-     */
-    GrailsViewHelper getG() {
-        return this.viewHelper
-    }
 
     /**
      * Defines the model

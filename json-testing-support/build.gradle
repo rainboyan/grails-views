@@ -1,25 +1,12 @@
-group "org.grails"
-
-ext {
-    gradleWrapperVersion = project.gradleWrapperVersion
-    userOrg = 'grails'
-    repo = 'grails-core'
-    isGrailsPlugin = false
-    projectDesc = "JSON Views Testing Support"
-}
-
 dependencies {
-    api project(":views-json")
-    api "org.grails:grails-core", {
-        exclude group: 'org.grails', module: 'grails-datastore-core'
-    }
+    api project(":grails-views-json")
+    api "org.grails:grails-core"
     compileOnly "jakarta.servlet:jakarta.servlet-api:$servletApiVersion"
 
     api "org.grails:grails-test-support", {
         exclude group: 'org.grails', module: 'grails-datastore-gorm'
         exclude group: 'org.grails', module: 'grails-datastore-gorm-test'
     }
-    api project(":views-json")
 }
 
 if (!tasks.findByName("sourcesJar")) {

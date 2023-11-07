@@ -5,12 +5,12 @@ import grails.plugin.json.builder.JsonOutput
 import grails.plugin.json.view.api.JsonView
 import grails.rest.Link
 import grails.util.TypeConvertingMap
+import grails.views.api.GrailsView
 import grails.views.api.http.Parameters
 import grails.views.api.internal.DefaultGrailsViewHelper
 import grails.views.mvc.http.DelegatingParameters
 import grails.views.utils.ViewUtils
 import groovy.transform.CompileStatic
-import groovy.transform.InheritConstructors
 import org.codehaus.groovy.runtime.StackTraceUtils
 import org.grails.core.util.IncludeExcludeSupport
 import org.grails.datastore.gorm.GormEnhancer
@@ -23,7 +23,6 @@ import java.beans.PropertyDescriptor
 import java.lang.reflect.ParameterizedType
 
 @CompileStatic
-@InheritConstructors
 class DefaultJsonViewHelper extends DefaultGrailsViewHelper {
 
     public static final String PAGINATION_SORT = "sort"
@@ -61,6 +60,10 @@ class DefaultJsonViewHelper extends DefaultGrailsViewHelper {
     IncludeExcludeSupport<String> simpleIncludeExcludeSupport = new DefaultJsonViewIncludeExcludeSupport(null, DEFAULT_EXCLUDES)
     IncludeExcludeSupport<String> validateableIncludeExcludeSupport = new DefaultJsonViewIncludeExcludeSupport(null, DEFAULT_VALIDATEABLE_EXCLUDES)
     IncludeExcludeSupport<String> includeExcludeSupport = new DefaultJsonViewIncludeExcludeSupport(null, DEFAULT_GORM_EXCLUDES)
+
+    DefaultJsonViewHelper(GrailsView view) {
+        super(view)
+    }
 
     List<String> getIncludes(Map arguments) {
         ViewUtils.getStringListFromMap(IncludeExcludeSupport.INCLUDES_PROPERTY, arguments, null)

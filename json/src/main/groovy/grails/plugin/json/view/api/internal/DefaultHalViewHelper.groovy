@@ -4,7 +4,7 @@ import grails.gorm.PagedResultList
 import grails.plugin.json.builder.JsonGenerator
 import grails.plugin.json.builder.JsonOutput
 import grails.plugin.json.builder.StreamingJsonBuilder
-import grails.plugin.json.builder.StreamingJsonBuilder.StreamingJsonDelegate
+import grails.plugin.json.builder.StreamingJsonDelegate
 import grails.plugin.json.view.api.GrailsJsonViewHelper
 import grails.plugin.json.view.api.HalViewHelper
 import grails.plugin.json.view.api.JsonView
@@ -61,7 +61,7 @@ class DefaultHalViewHelper extends DefaultJsonViewHelper implements HalViewHelpe
      * Same as {@link GrailsJsonViewHelper#render(java.lang.Object, java.util.Map, groovy.lang.Closure)} but renders HAL links too
      */
     @Override
-    JsonOutput.JsonWritable render(Object object, Map arguments, @DelegatesTo(StreamingJsonBuilder.StreamingJsonDelegate) Closure customizer) {
+    JsonOutput.JsonWritable render(Object object, Map arguments, @DelegatesTo(StreamingJsonDelegate) Closure customizer) {
         if(arguments == null) {
             arguments = new LinkedHashMap()
         }
@@ -110,7 +110,7 @@ class DefaultHalViewHelper extends DefaultJsonViewHelper implements HalViewHelpe
      * Same as {@link GrailsJsonViewHelper#render(java.lang.Object, java.util.Map, groovy.lang.Closure)} but renders HAL links too
      */
     @Override
-    JsonOutput.JsonWritable render(Object object,  @DelegatesTo(StreamingJsonBuilder.StreamingJsonDelegate) Closure customizer ) {
+    JsonOutput.JsonWritable render(Object object,  @DelegatesTo(StreamingJsonDelegate) Closure customizer ) {
         render(object, (Map)null, customizer)
     }
 
@@ -316,7 +316,7 @@ class DefaultHalViewHelper extends DefaultJsonViewHelper implements HalViewHelpe
 
             if(!embeddedValues.isEmpty()) {
                 embedded {
-                    StreamingJsonBuilder.StreamingJsonDelegate jsonDelegate = (StreamingJsonBuilder.StreamingJsonDelegate)getDelegate()
+                    StreamingJsonDelegate jsonDelegate = (StreamingJsonDelegate)getDelegate()
                     for(entry in embeddedValues) {
                         def embeddedObject = entry.value
                         Association association = entry.key
@@ -359,7 +359,7 @@ class DefaultHalViewHelper extends DefaultJsonViewHelper implements HalViewHelpe
             def proxyHandler = mappingContext.proxyFactory
 
             embedded {
-                StreamingJsonBuilder.StreamingJsonDelegate jsonDelegate = (StreamingJsonBuilder.StreamingJsonDelegate)getDelegate()
+                StreamingJsonDelegate jsonDelegate = (StreamingJsonDelegate)getDelegate()
                 for(entry in model.entrySet()) {
                     Object embeddedObject = proxyHandler.unwrap( entry.value )
 
@@ -421,7 +421,7 @@ class DefaultHalViewHelper extends DefaultJsonViewHelper implements HalViewHelpe
         }
     }
 
-    protected void renderProperty(Object embeddedObject, PersistentProperty prop,  EntityReflector associationReflector, StreamingJsonBuilder.StreamingJsonDelegate jsonDelegate) {
+    protected void renderProperty(Object embeddedObject, PersistentProperty prop,  EntityReflector associationReflector, StreamingJsonDelegate jsonDelegate) {
         def propertyName = prop.name
         def propVal = associationReflector.getProperty(embeddedObject, propertyName)
         def propertyType = prop.type

@@ -1,24 +1,24 @@
 package grails.plugin.component.view.mvc
 
+import groovy.transform.CompileStatic
+import org.springframework.beans.factory.InitializingBean
+import org.springframework.beans.factory.annotation.Autowired
+
 import grails.core.support.proxy.ProxyHandler
 import grails.plugin.component.view.ComponentViewConfiguration
 import grails.plugin.component.view.ComponentViewTemplate
 import grails.plugin.component.view.ComponentViewTemplateEngine
-import grails.plugin.component.view.ComponentViewWritableScriptTemplate
 import grails.plugin.component.view.renderer.ComponentViewHtmlRenderer
 import grails.rest.render.RendererRegistry
 import grails.views.mvc.SmartViewResolver
 import grails.web.mime.MimeType
-import groovy.transform.CompileStatic
-import org.springframework.beans.factory.annotation.Autowired
-import jakarta.annotation.PostConstruct
 
 /**
  * @author Graeme Rocher
  * @since 1.0
  */
 @CompileStatic
-class ComponentViewResolver extends SmartViewResolver {
+class ComponentViewResolver extends SmartViewResolver implements InitializingBean {
 
     public static final String COMPONENT_VIEW_SUFFIX = ".${ComponentViewTemplate.EXTENSION}"
 
@@ -44,8 +44,8 @@ class ComponentViewResolver extends SmartViewResolver {
         viewConfiguration = (ComponentViewConfiguration)templateEngine.viewConfiguration
     }
 
-    @PostConstruct
-    void initialize() {
+    @Override
+    void afterPropertiesSet() {
         if(rendererRegistry != null) {
             def defaultHtmlRenderer = rendererRegistry.findRenderer(MimeType.HTML, Object.class)
             viewConfiguration.mimeTypes.each { String mimeTypeString ->
@@ -56,4 +56,5 @@ class ComponentViewResolver extends SmartViewResolver {
             }
         }
     }
+
 }

@@ -46,6 +46,7 @@ if (isReleaseVersion) {
 }
 
 subprojects { project->
+    group "org.grails.views"
     version project.projectVersion
 
     configurations.all {
@@ -60,8 +61,6 @@ subprojects { project->
         return
     }
 
-    ext.isGrailsPlugin = project.name in ['views-component', 'views-markup', 'views-json']
-
     apply plugin: 'eclipse'
     apply plugin: 'idea'
     apply plugin: 'java-library'
@@ -70,10 +69,6 @@ subprojects { project->
     apply plugin: 'signing'
     apply plugin: "org.gradle.test-retry"
     apply plugin: "io.spring.dependency-management"
-
-    if (ext.isGrailsPlugin) {
-        apply plugin: "org.grails.grails-plugin"
-    }
 
     sourceCompatibility = 17
     targetCompatibility = 17
@@ -101,7 +96,7 @@ subprojects { project->
     apply from: '../publishing/grailsCentralPublishing.gradle'
 
 
-    if (project.name in ["views-core", "views-component", "views-json", "views-markup", "views-json-testing-support"]) {
+    if (project.name in ["grails-views-core", "grails-views-component", "grails-views-json", "grails-views-markup", "grails-views-json-testing-support"]) {
 
         configurations {
             documentation
